@@ -17,25 +17,25 @@ jobs:
       - name: Checkout portfolio repo
         uses: actions/checkout@v4
         with:
-          # Set PORTFOLIO_REPO variable in repo Settings, or replace with your repo path
           repository: ${{ vars.PORTFOLIO_REPO }}
           token: ${{ secrets.PORTFOLIO_UPDATE_TOKEN }}
           path: portfolio
           fetch-depth: 0
+          submodules: true
 
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global url."https://x-access-token:${{ secrets.PORTFOLIO_UPDATE_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Update your-life-in-data submodule
         run: |
           cd portfolio
-          git submodule update --init your-life-in-data
+          git submodule update --init
           cd your-life-in-data
-          git fetch origin main
-          git checkout main
-          git pull origin main
+          git fetch origin
+          git checkout ${{ github.sha }}
           cd ..
           git add your-life-in-data
 
