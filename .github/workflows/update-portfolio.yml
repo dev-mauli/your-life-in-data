@@ -1,0 +1,50 @@
+# Automatically updates the portfolio repo when you push to your-life-in-data
+# The portfolio repo must have your-life-in-data as a git submodule
+#
+# Setup: Add PORTFOLIO_UPDATE_TOKEN (PAT) and PORTFOLIO_REPO (e.g. user/panduranglad.dev)
+#        as secrets/variables in this repo. See docs/AUTO-SYNC-SETUP.md
+
+name: Update Portfolio Submodule
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update-portfolio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout portfolio repo
+        uses: actions/checkout@v4
+        with:
+          # Set PORTFOLIO_REPO variable in repo Settings, or replace with your repo path
+          repository: ${{ vars.PORTFOLIO_REPO || 'panduranglad/panduranglad.dev' }}
+          token: ${{ secrets.PORTFOLIO_UPDATE_TOKEN }}
+          path: portfolio
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update your-life-in-data submodule
+        run: |
+          cd portfolio
+          git submodule update --init your-life-in-data
+          cd your-life-in-data
+          git fetch origin main
+          git checkout main
+          git pull origin main
+          cd ..
+          git add your-life-in-data
+
+      - name: Commit and push if changed
+        run: |
+          cd portfolio
+          if git diff --staged --quiet; then
+            echo "No changes to push"
+          else
+            git commit -m "chore: update your-life-in-data submodule to ${{ github.sha }}"
+            git push origin main
+          fi
