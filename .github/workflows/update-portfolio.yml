@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # Set PORTFOLIO_REPO variable in repo Settings, or replace with your repo path
-          repository: ${{ vars.PORTFOLIO_REPO || 'panduranglad/panduranglad.dev' }}
+          repository: ${{ vars.PORTFOLIO_REPO }}
           token: ${{ secrets.PORTFOLIO_UPDATE_TOKEN }}
           path: portfolio
           fetch-depth: 0
