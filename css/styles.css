@@ -398,6 +398,25 @@ input[type="text"]:focus {
   display: block;
 }
 
+.page-footer {
+  text-align: center;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.page-footer a {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.page-footer a:hover {
+  color: var(--accent);
+}
+
 /* Responsive: tablets and below */
 @media (max-width: 768px) {
   .category-list {
