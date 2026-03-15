@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Your Life in Data</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Your Life in Data</h1>
+      <p class="tagline">Make abstract time tangible</p>
+    </header>
+
+    <div class="input-section">
+      <form id="life-form">
+        <div class="input-group">
+          <label for="name">Name (optional)</label>
+          <input type="text" id="name" placeholder="e.g. John, Sarah" autocomplete="name">
+        </div>
+        <div class="input-group">
+          <label for="birthdate">Birth Date</label>
+          <input type="date" id="birthdate" required>
+        </div>
+        <div class="input-group">
+          <label for="location">Location (optional)</label>
+          <input type="text" id="location" placeholder="e.g. New York, Tokyo">
+        </div>
+        <div class="stats-picker">
+          <div class="stats-picker-label">Click a category to select all • Choose what matters to you</div>
+          <div class="category-list" id="category-list"></div>
+          <div class="stats-actions">
+            <button type="button" id="select-all">Select All</button>
+            <button type="button" id="select-none">Select None</button>
+          </div>
+        </div>
+        <p class="error-message" id="error-message">Please enter a valid birth date (not in the future).</p>
+        <button type="submit" class="btn btn-primary">Generate Life Receipt</button>
+      </form>
+    </div>
+
+    <div class="receipt-wrapper" id="receipt-wrapper">
+      <div class="receipt" id="receipt">
+        <div class="receipt-header">
+          <div class="receipt-title">LIFE RECEIPT</div>
+          <div class="receipt-name" id="receipt-name"></div>
+          <div class="receipt-subtitle" id="receipt-subtitle">YOUR STATS SO FAR</div>
+          <div class="receipt-date" id="receipt-date"></div>
+        </div>
+        <div id="receipt-items"></div>
+        <div class="receipt-footer">
+          THANK YOU FOR LIVING
+          <div class="receipt-footer-sub">EVERY MOMENT COUNTS</div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary" id="download-btn">Download as Image</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
