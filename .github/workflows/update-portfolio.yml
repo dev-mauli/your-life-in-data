@@ -1,52 +1,35 @@
-name: Update Portfolio Submodule
+name: Sync Portfolio Submodule
 
 on:
   push:
     branches: [main]
 
 jobs:
-  update-portfolio:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout portfolio repo
+      - name: Checkout Portfolio Repo
         uses: actions/checkout@v4
         with:
           repository: ${{ vars.PORTFOLIO_REPO }}
           token: ${{ secrets.PORTFOLIO_UPDATE_TOKEN }}
-          path: portfolio
           fetch-depth: 0
+          submodules: recursive
 
-      - name: Configure Git
+      - name: Update Submodule
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Initialize submodules
-        run: |
-          cd portfolio
-          git submodule sync
-          git submodule update --init --recursive
-
-      - name: Update your-life-in-data submodule
-        run: |
-          cd portfolio
-
-          # verify folder exists
-          ls -la
-
-          # update submodule pointer
           git submodule update --remote your-life-in-data
-
           git add your-life-in-data
 
-      - name: Commit and push
+      - name: Commit & Push
         run: |
-          cd portfolio
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
 
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "No update needed"
           else
-            git commit -m "chore: update your-life-in-data submodule"
-            git push origin main
+            git commit -m "Auto update your-life-in-data submodule"
+            git push
           fi
