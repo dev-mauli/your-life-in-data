@@ -16,42 +16,37 @@ jobs:
           token: ${{ secrets.PORTFOLIO_UPDATE_TOKEN }}
           path: portfolio
           fetch-depth: 0
-          submodules: recursive
 
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global url."https://x-access-token:${{ secrets.PORTFOLIO_UPDATE_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Initialize submodules
+        run: |
+          cd portfolio
+          git submodule sync
+          git submodule update --init --recursive
 
       - name: Update your-life-in-data submodule
         run: |
           cd portfolio
 
-          # ensure submodules are initialized
-          git submodule update --init --recursive
+          # verify folder exists
+          ls -la
 
-          # move into the submodule
-          cd your-life-in-data
+          # update submodule pointer
+          git submodule update --remote your-life-in-data
 
-          # fetch latest commits
-          git fetch origin
-
-          # checkout the commit that triggered this workflow
-          git checkout ${{ github.sha }}
-
-          cd ..
-
-          # stage submodule pointer update
           git add your-life-in-data
 
-      - name: Commit and push if changed
+      - name: Commit and push
         run: |
           cd portfolio
 
           if git diff --staged --quiet; then
-            echo "No changes to push"
+            echo "No changes to commit"
           else
-            git commit -m "chore: update your-life-in-data submodule to ${{ github.sha }}"
+            git commit -m "chore: update your-life-in-data submodule"
             git push origin main
           fi
